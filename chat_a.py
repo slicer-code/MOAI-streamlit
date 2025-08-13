@@ -14,14 +14,33 @@ from datetime import datetime
 import random
 import re
 from css import log_and_render
-
+import streamlit as st, pandas as pd, json, requests
 # -------------------- 모델 및 데이터 로딩 --------------------
 sbert_model = SentenceTransformer("jhgan/ko-sroberta-multitask")
 tokenizer = AutoTokenizer.from_pretrained("hun3359/klue-bert-base-sentiment")
 sentiment_model = AutoModelForSequenceClassification.from_pretrained("hun3359/klue-bert-base-sentiment")
 sentiment_model.eval()
 
-travel_df = pd.read_csv("트립닷컴_감정_테마_한줄설명_통합_07_08.csv")
+
+@st.cache_data(show_spinner=False)
+def load_csv_any(p):
+    p = str(p)
+    if p.startswith(("http://","https://")):
+        return pd.read_csv(p)
+    return pd.read_csv(p)
+
+@st.cache_data(show_spinner=False)
+def load_json_any(p):
+    p = str(p)
+    if p.startswith(("http://","https://")):
+        return requests.get(p, timeout=60).json()
+    with open(p, "r", encoding="utf-8") as f:
+        return json.load(f)
+        
+TRIP_CSV_URL = st.secrets.get("TRIP_CSV_URL")
+if not TRIP_CSV_URL:
+    st.stop()  # Secrets에 URL 없으면 빌드 중단(명확히 실패시키기)
+travel_df = load_csv_any(TRIP_CSV_URL)
 festival_df = pd.read_csv("전처리_통합지역축제.csv")
 external_score_df = pd.read_csv("클러스터_포함_외부요인_종합점수_결과_최종.csv")
 external_score_df.columns = external_score_df.columns.str.strip()
