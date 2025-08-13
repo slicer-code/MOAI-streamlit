@@ -1,6 +1,6 @@
 import pandas as pd
 import json
-
+import os
 import random
 from chat_a import (#함수 추가 적용##########
     analyze_emotion,
@@ -44,7 +44,8 @@ def load_json_data(file_path):
         return json.load(f)
 
 # ───────────────────────────────────── 데이터 로드
-travel_df = load_travel_data("트립닷컴_감정_테마_한줄설명_통합_07_08.csv")
+trip_csv_url = os.environ.get("https://huggingface.co/datasets/emisdfe/moai-travel-data/resolve/main/trip_review_07_08.csv")
+travel_df = pd.read_csv(trip_csv_url)
 external_score_df = load_travel_data("클러스터_포함_외부요인_종합점수_결과_최종.csv")
 festival_df = load_travel_data("전처리_통합지역축제.csv")
 weather_df = load_travel_data("전처리_날씨_통합_07_08.csv")
