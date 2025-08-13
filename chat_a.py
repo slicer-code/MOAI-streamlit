@@ -24,23 +24,14 @@ sentiment_model.eval()
 
 @st.cache_data(show_spinner=False)
 def load_csv_any(p):
-    p = str(p)
-    if p.startswith(("http://","https://")):
-        return pd.read_csv(p)
-    return pd.read_csv(p)
+    return pd.read_csv(p) if str(p).startswith(("http://","https://")) else pd.read_csv(p)
 
-@st.cache_data(show_spinner=False)
-def load_json_any(p):
-    p = str(p)
-    if p.startswith(("http://","https://")):
-        return requests.get(p, timeout=60).json()
-    with open(p, "r", encoding="utf-8") as f:
-        return json.load(f)
-        
-TRIP_CSV_URL = st.secrets.get("TRIP_CSV_URL")
-if not TRIP_CSV_URL:
-    st.stop()  # Secrets에 URL 없으면 빌드 중단(명확히 실패시키기)
-travel_df = load_csv_any(TRIP_CSV_URL)
+trip_url = st.secrets.get("TRIPDATA_URL")
+if not trip_url:
+    st.error("TRIPDATA_URL 미설정: Streamlit Secrets에 URL을 넣어주세요.")
+    st.stop()
+
+travel_df = load_csv_any(trip_url)
 festival_df = pd.read_csv("전처리_통합지역축제.csv")
 external_score_df = pd.read_csv("클러스터_포함_외부요인_종합점수_결과_최종.csv")
 external_score_df.columns = external_score_df.columns.str.strip()
