@@ -1305,9 +1305,10 @@ def main():
     # ───── 사용자 입력 & 추천 시작 
     # 1) 사용자 입력
     user_input = st.text_input(
-        label="", 
+        "입력창", # 비어있지 않은 라벨(접근성 확보)
         placeholder="ex)'요즘 힐링이 필요해요', '가족 여행 어디가 좋을까요?'",
-        key="user_input"
+        key="user_input",
+        label_visibility="collapsed",  # 화면에선 숨김
     )
     user_input_key = "last_user_input"
     select_keys = ["intent_chip_selected", "region_chip_selected", "emotion_chip_selected", "theme_chip_selected"]
