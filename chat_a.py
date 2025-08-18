@@ -16,10 +16,23 @@ import re
 from css import log_and_render
 import streamlit as st, pandas as pd, json, requests
 # -------------------- 모델 및 데이터 로딩 --------------------
-#sbert_model = SentenceTransformer("jhgan/ko-sroberta-multitask")
-tokenizer = AutoTokenizer.from_pretrained("hun3359/klue-bert-base-sentiment")
-#sentiment_model = AutoModelForSequenceClassification.from_pretrained("hun3359/klue-bert-base-sentiment")
-sentiment_model.eval()
+# 모델 로딩 부분을 함수로 만들고 데코레이터 추가
+@st.cache_resource
+def load_sbert_model():
+    print("SBERT 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
+    return SentenceTransformer("jhgan/ko-sroberta-multitask")
+
+@st.cache_resource
+def load_sentiment_model():
+    print("감성 분석 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
+    model = AutoModelForSequenceClassification.from_pretrained("hun3359/klue-bert-base-sentiment")
+    model.eval()
+    return model
+
+@st.cache_resource
+def load_tokenizer():
+    print("토크나이저 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
+    return AutoTokenizer.from_pretrained("hun3359/klue-bert-base-sentiment")
 
 
 @st.cache_data(show_spinner=False)
@@ -962,6 +975,8 @@ def override_emotion_if_needed(text):
     return None
     
 def analyze_emotion(user_input):
+    sentiment_model = load_sentiment_model()
+    tokenizer = load_tokenizer()
     override = override_emotion_if_needed(user_input)
     if override:
         return override
@@ -993,6 +1008,8 @@ def detect_intent(user_input):
         for word in keywords:
             phrases.append(word)
             labels.append(intent)
+
+    sbert_model = load_sbert_model()
     input_emb = sbert_model.encode(user_input, convert_to_tensor=True)
     phrase_embs = sbert_model.encode(phrases, convert_to_tensor=True)
     sims = util.cos_sim(input_emb, phrase_embs)[0]
