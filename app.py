@@ -32,6 +32,8 @@ from css import render_message, render_chip_buttons, log_and_render, replay_log
 
 import streamlit as st, pandas as pd, requests, json
 
+st.success("🎉 앱이 성공적으로 시작되었습니다! 라이브러리 설치 성공!")
+
 @st.cache_data(show_spinner=False)
 def load_csv_any(p):
     return pd.read_csv(p) if str(p).startswith(("http://","https://")) else pd.read_csv(p)
