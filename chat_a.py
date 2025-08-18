@@ -984,6 +984,8 @@ def analyze_emotion(user_input):
     if override:
         return override
     inputs = tokenizer(user_input, return_tensors="pt", truncation=True)
+    # 모델에게 전달하기 전에 불필요한 서류를 제거!
+    inputs.pop("token_type_ids", None)
     with torch.no_grad():
         probs = F.softmax(sentiment_model(**inputs).logits, dim=1)[0]
     top_indices = torch.topk(probs, k=5).indices.tolist()
