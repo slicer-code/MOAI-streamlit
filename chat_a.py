@@ -27,7 +27,7 @@ def load_sbert_model():
 def load_sentiment_model():
     print("감성 분석 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
     # 'hun3359/klue-bert-base-sentiment' 대신 더 가벼운 모델로 변경
-    model = AutoModelForSequenceClassification.from_pretrained("monologg/distilkobert-base")
+    model = AutoModelForSequenceClassification.from_pretrained("monologg/distilkobert")
     model.eval()
     return model
 
@@ -35,7 +35,7 @@ def load_sentiment_model():
 def load_tokenizer():
     print("토크나이저 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
     # 'hun3359/klue-bert-base-sentiment' 대신 더 가벼운 모델로 변경
-    return AutoTokenizer.from_pretrained("monologg/distilkobert-base")
+    return AutoTokenizer.from_pretrained("monologg/distilkobert")
 
 
 @st.cache_data(show_spinner=False)
