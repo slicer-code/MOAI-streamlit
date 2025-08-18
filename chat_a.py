@@ -19,23 +19,20 @@ import streamlit as st, pandas as pd, json, requests
 # 모델 로딩 부분을 함수로 만들고 데코레이터 추가
 @st.cache_resource
 def load_sbert_model():
-    print("SBERT 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
-    # 'jhgan/ko-sroberta-multitask' 대신 더 가벼운 다국어 모델로 변경
-    return SentenceTransformer("distiluse-base-multilingual-cased-v1")
+    print("SBERT 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")    
+    return SentenceTransformer("jhgan/ko-sroberta-multitask")
 
 @st.cache_resource
 def load_sentiment_model():
-    print("감성 분석 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
-    # 'hun3359/klue-bert-base-sentiment' 대신 더 가벼운 모델로 변경
-    model = AutoModelForSequenceClassification.from_pretrained("monologg/distilkobert",trust_remote_code=True)
+    print("감성 분석 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")    
+    model = AutoModelForSequenceClassification.from_pretrained("hun3359/klue-bert-base-sentiment")
     model.eval()
     return model
 
 @st.cache_resource
 def load_tokenizer():
-    print("토크나이저 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
-    # 'hun3359/klue-bert-base-sentiment' 대신 더 가벼운 모델로 변경
-    return AutoTokenizer.from_pretrained("monologg/distilkobert",trust_remote_code=True)
+    print("토크나이저 로딩 중... (이 메시지는 한 번만 보여야 합니다)")   
+    return AutoTokenizer.from_pretrained("hun3359/klue-bert-base-sentiment")
 
 
 @st.cache_data(show_spinner=False)
@@ -984,8 +981,7 @@ def analyze_emotion(user_input):
     if override:
         return override
     inputs = tokenizer(user_input, return_tensors="pt", truncation=True)
-    # 모델에게 전달하기 전에 불필요한 서류를 제거!
-    inputs.pop("token_type_ids", None)
+    
     with torch.no_grad():
         probs = F.softmax(sentiment_model(**inputs).logits, dim=1)[0]
     top_indices = torch.topk(probs, k=5).indices.tolist()
