@@ -16,9 +16,9 @@ import re
 from css import log_and_render
 import streamlit as st, pandas as pd, json, requests
 # -------------------- 모델 및 데이터 로딩 --------------------
-sbert_model = SentenceTransformer("jhgan/ko-sroberta-multitask")
+#sbert_model = SentenceTransformer("jhgan/ko-sroberta-multitask")
 tokenizer = AutoTokenizer.from_pretrained("hun3359/klue-bert-base-sentiment")
-sentiment_model = AutoModelForSequenceClassification.from_pretrained("hun3359/klue-bert-base-sentiment")
+#sentiment_model = AutoModelForSequenceClassification.from_pretrained("hun3359/klue-bert-base-sentiment")
 sentiment_model.eval()
 
 
