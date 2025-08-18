@@ -20,7 +20,7 @@ import streamlit as st, pandas as pd, json, requests
 @st.cache_resource
 def load_sbert_model():
     print("SBERT 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
-    return SentenceTransformer("jhgan/ko-sroberta-multitask")
+    return SentenceTransformer("distiluse-base-multilingual-cased-v1")
 
 @st.cache_resource
 def load_sentiment_model():
