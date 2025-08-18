@@ -20,19 +20,22 @@ import streamlit as st, pandas as pd, json, requests
 @st.cache_resource
 def load_sbert_model():
     print("SBERT 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
+    # 'jhgan/ko-sroberta-multitask' 대신 더 가벼운 다국어 모델로 변경
     return SentenceTransformer("distiluse-base-multilingual-cased-v1")
 
 @st.cache_resource
 def load_sentiment_model():
     print("감성 분석 모델 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
-    model = AutoModelForSequenceClassification.from_pretrained("hun3359/klue-bert-base-sentiment")
+    # 'hun3359/klue-bert-base-sentiment' 대신 더 가벼운 모델로 변경
+    model = AutoModelForSequenceClassification.from_pretrained("monologg/distilkobert-base")
     model.eval()
     return model
 
 @st.cache_resource
 def load_tokenizer():
     print("토크나이저 로딩 중... (이 메시지는 한 번만 보여야 합니다)")
-    return AutoTokenizer.from_pretrained("hun3359/klue-bert-base-sentiment")
+    # 'hun3359/klue-bert-base-sentiment' 대신 더 가벼운 모델로 변경
+    return AutoTokenizer.from_pretrained("monologg/distilkobert-base")
 
 
 @st.cache_data(show_spinner=False)
