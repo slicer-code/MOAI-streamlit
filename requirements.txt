@@ -1,9 +1,8 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
-streamlit==1.48.1
-pandas==2.3.1
-numpy==2.3.2
-scikit-learn==1.7.1
-transformers==4.55.2
-sentence-transformers==5.1.0
-scikit-learn>=1.4
-requests>=2.32
+streamlit
+pandas
+numpy
+scikit-learn
+transformers
+sentence-transformers
+requests
