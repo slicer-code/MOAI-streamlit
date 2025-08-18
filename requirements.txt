@@ -6,3 +6,4 @@ scikit-learn
 transformers
 sentence-transformers
 requests
+sentencepiece  # <- 마지막 열쇠 추가!
